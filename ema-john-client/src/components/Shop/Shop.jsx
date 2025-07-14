@@ -11,7 +11,7 @@ const Shop = () => {
     const { count } = useLoaderData()
     console.log(count)
     const [numberOfItems, setnumberOfItems] = useState(10)
-    const [currentPage, setCurrentpage] = useState(null)
+    const [currentPage, setCurrentpage] = useState(0)
     const numberOfPages = Math.ceil(count / numberOfItems)
     console.log(numberOfPages)
     const pages = [...Array(numberOfPages).keys()]
@@ -34,10 +34,10 @@ const Shop = () => {
         }
     };
     useEffect(() => {
-        fetch('http://localhost:5000/products')
+        fetch(`http://localhost:5000/products?page=${currentPage}&size=${numberOfItems}`)
             .then(res => res.json())
             .then(data => setProducts(data))
-    }, []);
+    }, [currentPage, numberOfPages]);
 
     useEffect(() => {
         const storedCart = getShoppingCart();
