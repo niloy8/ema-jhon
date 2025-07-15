@@ -10,11 +10,16 @@ const Shop = () => {
     const [cart, setCart] = useState([])
     const { count } = useLoaderData()
     console.log(count)
-    const numberOfItems = 10
+    const [numberOfItems, setnumberOfItems] = useState(10)
     const numberOfPages = Math.ceil(count / numberOfItems)
     console.log(numberOfPages)
     const pages = [...Array(numberOfPages).keys()]
     console.log(pages)
+
+    const handleSelect = (e) => {
+        const val = e.target.value
+        setnumberOfItems(val)
+    };
     useEffect(() => {
         fetch('http://localhost:5000/products')
             .then(res => res.json())
@@ -89,8 +94,13 @@ const Shop = () => {
                 </Cart>
             </div>
 
-            <div>
+            <div className='pagination'>
                 {pages.map(page => <button key={page}>{page + 1}</button>)}
+                <select name="pages" onChange={handleSelect} defaultValue={10} id="">
+                    <option value="5">5</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
             </div>
         </div>
     );
