@@ -10,6 +10,11 @@ const Shop = () => {
     const [cart, setCart] = useState([])
     const { count } = useLoaderData()
     console.log(count)
+    const numberOfItems = 10
+    const numberOfPages = Math.ceil(count / numberOfItems)
+    console.log(numberOfPages)
+    const pages = [...Array(numberOfPages).keys()]
+    console.log(pages)
     useEffect(() => {
         fetch('http://localhost:5000/products')
             .then(res => res.json())
@@ -82,6 +87,10 @@ const Shop = () => {
                         <button className='btn-proceed'>Review Order</button>
                     </Link>
                 </Cart>
+            </div>
+
+            <div>
+                {pages.map(page => <button key={page}>{page + 1}</button>)}
             </div>
         </div>
     );
