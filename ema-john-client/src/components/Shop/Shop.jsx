@@ -11,6 +11,7 @@ const Shop = () => {
     const { count } = useLoaderData()
     console.log(count)
     const [numberOfItems, setnumberOfItems] = useState(10)
+    const [currentPage, setCurrentpage] = useState(null)
     const numberOfPages = Math.ceil(count / numberOfItems)
     console.log(numberOfPages)
     const pages = [...Array(numberOfPages).keys()]
@@ -19,6 +20,18 @@ const Shop = () => {
     const handleSelect = (e) => {
         const val = e.target.value
         setnumberOfItems(val)
+        setCurrentpage(0)
+    };
+
+    const handlePrevious = () => {
+        if (currentPage > 0) {
+            setCurrentpage(currentPage - 1)
+        }
+    };
+    const handleNext = () => {
+        if (currentPage < pages.length) {
+            setCurrentpage(currentPage + 1)
+        }
     };
     useEffect(() => {
         fetch('http://localhost:5000/products')
@@ -93,14 +106,18 @@ const Shop = () => {
                     </Link>
                 </Cart>
             </div>
-
+            {console.log(currentPage)}
             <div className='pagination'>
-                {pages.map(page => <button key={page}>{page + 1}</button>)}
+                <button onClick={handlePrevious}>Prev</button>
+                {pages.map(page => <button
+                    className={page === currentPage && 'selected'}
+                    key={page} onClick={() => setCurrentpage(page)}>{page + 1}</button>)}
                 <select name="pages" onChange={handleSelect} defaultValue={10} id="">
                     <option value="5">5</option>
                     <option value="20">20</option>
                     <option value="30">30</option>
                 </select>
+                <button onClick={handleNext}>Next</button>
             </div>
         </div>
     );
