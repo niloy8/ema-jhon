@@ -33,7 +33,13 @@ async function run() {
     app.get('/products', async (req, res) => {
 
       console.log('pages', req.query)
-      const result = await productCollection.find().toArray();
+      const page = parseInt(req.query.page)
+      const size = parseInt(req.query.size)
+
+      const result = await productCollection.find()
+        .skip(page * size)
+        .limit(size)
+        .toArray();
       res.send(result);
     })
 
