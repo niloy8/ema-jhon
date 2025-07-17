@@ -7,16 +7,26 @@ import { Link, useLoaderData } from 'react-router-dom';
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
-    const [cart, setCart] = useState([])
-    const { count } = useLoaderData()
+    const cart = useLoaderData()
+    // const { count } = useLoaderData()
+    const [count, setCount] = useState(0)
     console.log(count)
     const [numberOfItems, setnumberOfItems] = useState(10)
     const [currentPage, setCurrentpage] = useState(0)
     const numberOfPages = Math.ceil(count / numberOfItems)
     console.log(numberOfPages)
+    const storedCart = getShoppingCart();
+    const storedCartIds = Object.keys(storedCart)
+    console.log(storedCartIds)
     const pages = [...Array(numberOfPages).keys()]
     console.log(pages)
 
+
+    useEffect(() => {
+        fetch('http://localhost:5000/productscount')
+            .then(res => res.json())
+            .then(data => setCount(data.count))
+    }, [])
     const handleSelect = (e) => {
         const val = e.target.value
         setnumberOfItems(val)
@@ -39,25 +49,25 @@ const Shop = () => {
             .then(data => setProducts(data))
     }, [currentPage, numberOfItems]);
 
-    useEffect(() => {
-        const storedCart = getShoppingCart();
-        const savedCart = [];
-        // step 1: get id of the addedProduct
-        for (const id in storedCart) {
-            // step 2: get product from products state by using id
-            const addedProduct = products.find(product => product._id === id)
-            if (addedProduct) {
-                // step 3: add quantity
-                const quantity = storedCart[id];
-                addedProduct.quantity = quantity;
-                // step 4: add the added product to the saved cart
-                savedCart.push(addedProduct);
-            }
-            // console.log('added Product', addedProduct)
-        }
-        // step 5: set the cart
-        setCart(savedCart);
-    }, [products])
+    // useEffect(() => {
+
+    //     const savedCart = [];
+    //     // step 1: get id of the addedProduct
+    //     for (const id in storedCart) {
+    //         // step 2: get product from products state by using id
+    //         const addedProduct = products.find(product => product._id === id)
+    //         if (addedProduct) {
+    //             // step 3: add quantity
+    //             const quantity = storedCart[id];
+    //             addedProduct.quantity = quantity;
+    //             // step 4: add the added product to the saved cart
+    //             savedCart.push(addedProduct);
+    //         }
+    //         // console.log('added Product', addedProduct)
+    //     }
+    //     // step 5: set the cart
+    //     setCart(savedCart);
+    // }, [products])
 
     const handleAddToCart = (product) => {
         // cart.push(product); '
