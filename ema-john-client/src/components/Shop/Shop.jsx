@@ -110,7 +110,7 @@ const Shop = () => {
             <div className='pagination'>
                 <button onClick={handlePrevious}>Prev</button>
                 {pages.map(page => <button
-                    className={page === currentPage && 'selected'}
+                    className={page === currentPage ? 'selected' : ''}
                     key={page} onClick={() => setCurrentpage(page)}>{page + 1}</button>)}
                 <select name="pages" onChange={handleSelect} defaultValue={10} id="">
                     <option value="5">5</option>
